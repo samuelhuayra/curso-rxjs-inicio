@@ -1,38 +1,29 @@
 import { Observable, Subscriber, Observer } from "rxjs";
 
-//Method 1
 const observer:Observer<any>={
-    next: value=> console.log('Siguiente [next]: ',value),
-    error: error=> console.warn('Error [obs]: ',error),
-    complete: ()=>console.log('Complete [obs]')
+    next: value=> console.log('next: ',value),
+    error: error=> console.warn('error: ',error),
+    complete: ()=>console.log('completed')
 }
 
-//Method 2
-//const obs$ = Observable.create()
-const obs$ = new Observable<String>( subs => {
-    subs.next('Hola')
-    subs.next('Mundo')
-
-    subs.next('Hola')
-    subs.next('Mundo')
-
-    //forzar error
-    /* const a = undefined
-    a.nombre = 'Samuel' */
-
-
-    subs.complete()
-    
-    subs.next('Hola')
-    subs.next('Mundo')
-});
-
-//Method 1
-obs$.subscribe(observer);
-
-//Method 2
-/* obs$.subscribe(
-    valor=> console.log('next: ',valor),
-    error=> console.warn('error: ',error),
-    ()=>console.log('Complete')
-) */
+const interval$ = new Observable<number> (subs=>{
+    let val:number = 0
+    const interval = setInterval(()=>{
+        val++;
+        subs.next(val)
+        console.log(val);
+    },1000)
+    return ()=>{
+        clearInterval(interval)
+        console.log('Intervalo destruido');
+    }
+})
+const subs1 = interval$.subscribe()
+const subs2 = interval$.subscribe()
+const subs3 = interval$.subscribe()
+setTimeout(()=>{
+subs1.unsubscribe()
+subs2.unsubscribe()
+subs3.unsubscribe()
+console.log('completado timeout');
+},3000)
