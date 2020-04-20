@@ -5,6 +5,7 @@ const letras$ = of('a','b','c')
 
 letras$.pipe(
     //Es como obtener el resultado de los observables [subcribe(val)]
+    //[se subscribe a todos los observable y todos siguen activos]
     mergeMap( (letra)=>interval(1000).pipe(
         map(i => letra+i),
         take(3)
