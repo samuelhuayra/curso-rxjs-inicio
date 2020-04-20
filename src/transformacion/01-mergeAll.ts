@@ -42,6 +42,7 @@ input$.pipe(
         ajax.getJSON(`https://api.github.com/search/users?q=${texto}`)
     ),
     //Entonces mergeAll va a suntar todos los observables
+    //Es como obtener el resultado de los observables [subcribe(val)]
     mergeAll<GithubUsers>(), //???
     pluck<GithubUsers,GithubUser[]>('items')
 ).subscribe(mostrarUsuarios)
@@ -54,6 +55,7 @@ const clicks = fromEvent(document, 'click');
 //map devuelve observables
 const higherOrder = clicks.pipe(map((ev) => interval(1000)));
 //Merge all va a unir esos observables en 1
+//Es como obtener el resultado de los observables [subcribe(val)]
 const firstOrder = higherOrder.pipe(mergeAll());
 
 firstOrder.subscribe(x => console.log(x));
